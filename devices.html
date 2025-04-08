@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="bg-indigo-800 text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold">Gateway Portal</h1>
+            </div>
+            <nav class="mt-5">
+                <a href="index.html" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-home mr-3"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="gateways.html" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-network-wired mr-3"></i>
+                    <span>Gateways</span>
+                </a>
+                <a href="devices.html" class="flex items-center px-6 py-3 text-white bg-indigo-900 hover:bg-indigo-700">
+                    <i class="fas fa-microchip mr-3"></i>
+                    <span>Devices</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-bell mr-3"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-cog mr-3"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Mobile Header -->
+            <header class="bg-white shadow-sm md:hidden">
+                <div class="flex items-center justify-between p-4">
+                    <h1 class="text-xl font-semibold">Gateway Portal</h1>
+                    <button id="menu-toggle" class="text-gray-500 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden hidden">
+                <div class="bg-indigo-800 text-white w-64 h-full p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Gateway Portal</h2>
+                        <button id="close-menu" class="text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <nav>
+                        <a href="index.html" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-home mr-3"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="gateways.html" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-network-wired mr-3"></i>
+                            <span>Gateways</span>
+                        </a>
+                        <a href="devices.html" class="flex items-center px-4 py-3 text-white bg-indigo-700 rounded">
+                            <i class="fas fa-microchip mr-3"></i>
+                            <span>Devices</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-chart-line mr-3"></i>
+                            <span>Analytics</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-bell mr-3"></i>
+                            <span>Notifications</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>Settings</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <main class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Connected Devices</h1>
+                        <p class="text-gray-600 mt-2">Manage and monitor all your IoT devices</p>
+                    </div>
+                    <a href="add-device.html" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300 flex items-center">
+                        <i class="fas fa-plus-circle mr-2"></i>
+                        Add New Device
+                    </a>
+                </div>
+
+                <!-- Filter and Search Bar -->
+                <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0">
+                        <div class="flex items-center space-x-2">
+                            <div class="relative">
+                                <input type="text" id="search-input" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Search devices...">
+                                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                            </div>
+                            <div>
+                                <select id="status-filter" class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option value="all">All Status</option>
+                                    <option value="connected">Connected</option>
+                                    <option value="disconnected">Disconnected</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-600" id="device-count">0 devices</span>
+                            <button id="refresh-btn" class="p-2 text-indigo-600 hover:text-indigo-800">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Device Cards Grid -->
+                <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Device cards will be inserted here by JavaScript -->
+                    <!-- Loading State -->
+                    <div id="loading-placeholder" class="col-span-full flex justify-center items-center py-12">
+                        <div class="text-center">
+                            <i class="fas fa-spinner fa-spin text-4xl text-indigo-600 mb-4"></i>
+                            <p class="text-gray-600">Loading devices...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Results Message -->
+                <div id="no-results" class="bg-gray-50 rounded-lg p-8 text-center hidden">
+                    <div class="inline-block p-3 bg-gray-100 rounded-full mb-4">
+                        <i class="fas fa-microchip text-3xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-gray-700 mb-2">No devices found</h3>
+                    <p class="text-gray-500 mb-6">There are no devices matching your current filters</p>
+                    <a href="add-device.html" class="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300 inline-flex items-center">
+                        <i class="fas fa-plus-circle mr-2"></i>
+                        Add New Device
+                    </a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Device Details Modal -->
+    <div id="device-modal" class="hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-xl font-semibold text-gray-800" id="modal-title">Device Details</h3>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6" id="modal-content">
+                <!-- Device details will be inserted here -->
+            </div>
+            <div class="flex justify-end space-x-3 p-6 border-t">
+                <button id="test-connection-btn" class="bg-green-50 text-green-700 hover:bg-green-100 py-2 px-4 rounded-md transition duration-300">
+                    <i class="fas fa-link mr-2"></i>
+                    Test Connection
+                </button>
+                <button id="delete-device-btn" class="bg-red-50 text-red-700 hover:bg-red-100 py-2 px-4 rounded-md transition duration-300">
+                    <i class="fas fa-trash-alt mr-2"></i>
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE_URL = "http://localhost:8000/api/v1";
+        const DEVICES_ENDPOINT = `${API_BASE_URL}/devices`;
+        
+        // IndexedDB setup
+        let db;
+        const DB_NAME = "GatewayDB";
+        const DB_VERSION = 1;
+        const DEVICE_STORE = "devices";
+        
+        // Initialize IndexedDB
+        function initializeDatabase() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = event => {
+                    console.error("IndexedDB error:", event.target.error);
+                    reject("Database error: " + event.target.error);
+                };
+                
+                request.onsuccess = event => {
+                    db = event.target.result;
+                    console.log("Database opened successfully");
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = event => {
+                    const db = event.target.result;
+                    
+                    if (!db.objectStoreNames.contains(DEVICE_STORE)) {
+                        const store = db.createObjectStore(DEVICE_STORE, { keyPath: "device_id" });
+                        store.createIndex("name", "name", { unique: false });
+                        store.createIndex("port", "port", { unique: false });
+                        store.createIndex("gateway_id", "gateway_id", { unique: false });
+                        console.log("Object store created");
+                    }
+                };
+            });
+        }
+        
+        // Fetch devices from API
+        async function fetchDevices() {
+            try {
+                const response = await fetch(DEVICES_ENDPOINT);
+                if (!response.ok) throw new Error('Failed to fetch devices');
+                return await response.json();
+            } catch (error) {
+                console.error("API error:", error);
+                throw error;
+            }
+        }
+        
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await initializeDatabase();
+                await loadDevices();
+                
+                // Event listeners
+                document.getElementById('refresh-btn').addEventListener('click', loadDevices);
+                document.getElementById('search-input').addEventListener('input', filterDevices);
+                document.getElementById('status-filter').addEventListener('change', filterDevices);
+                
+                // Mobile menu handlers
+                document.getElementById('menu-toggle').addEventListener('click', () => {
+                    document.getElementById('mobile-menu').classList.remove('hidden');
+                });
+                document.getElementById('close-menu').addEventListener('click', () => {
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                });
+                
+                // Modal handlers
+                document.getElementById('close-modal').addEventListener('click', closeDeviceModal);
+                document.getElementById('test-connection-btn').addEventListener('click', testDeviceConnection);
+                document.getElementById('delete-device-btn').addEventListener('click', confirmDeviceDeletion);
+            } catch (error) {
+                console.error("Initialization error:", error);
+                showError(`Failed to initialize: ${error.message}`);
+            }
+        });
+        
+        // Load devices
+        async function loadDevices() {
+            const container = document.getElementById('devices-container');
+            const loadingPlaceholder = document.getElementById('loading-placeholder');
+            const noResults = document.getElementById('no-results');
+            
+            // Show loading state
+            container.innerHTML = '';
+            container.appendChild(loadingPlaceholder);
+            loadingPlaceholder.classList.remove('hidden');
+            noResults.classList.add('hidden');
+            
+            try {
+                const devices = await fetchDevices();
+                
+                // Update counter
+                document.getElementById('device-count').textContent = `${devices.length} device${devices.length !== 1 ? 's' : ''}`;
+                
+                // Remove loading placeholder
+                loadingPlaceholder.classList.add('hidden');
+                container.innerHTML = '';
+                
+                if (devices.length === 0) {
+                    noResults.classList.remove('hidden');
+                    return;
+                }
+                
+                // Generate device cards
+                devices.forEach(device => {
+                    container.appendChild(createDeviceCard(device));
+                });
+                
+                // Store in local storage for offline access
+                storeDevicesLocally(devices);
+            } catch (error) {
+                console.error("Error loading devices:", error);
+                loadingPlaceholder.classList.add('hidden');
+                container.innerHTML = `
+                    <div class="col-span-full bg-red-50 text-red-700 p-6 rounded-lg text-center">
+                        <i class="fas fa-exclamation-circle text-3xl mb-3"></i>
+                        <p class="font-medium">Failed to load devices</p>
+                        <p class="mt-2 text-sm">${error.message}</p>
+                        <button id="retry-btn" class="mt-4 bg-red-100 hover:bg-red-200 text-red-700 py-2 px-4 rounded-md">
+                            <i class="fas fa-redo mr-2"></i>Retry
+                        </button>
+                    </div>
+                `;
+                document.getElementById('retry-btn').addEventListener('click', loadDevices);
+                
+                // Try loading from IndexedDB as fallback
+                loadDevicesFromIndexedDB();
+            }
+        }
+        
+        // Create device card HTML
+        function createDeviceCard(device) {
+            const isConnected = Math.random() > 0.3; // Simulate connection status (replace with real logic)
+            const lastSeen = new Date(device.last_seen || device.created_at).toLocaleString();
+            
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300';
+            card.dataset.deviceId = device.device_id;
+            card.dataset.name = device.name;
+            card.dataset.status = isConnected ? 'connected' : 'disconnected';
+            
+            card.innerHTML = `
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">${device.name}</h3>
+                            <p class="text-sm text-gray-500">${device.port}</p>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                isConnected ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                            }">
+                                <span class="h-2 w-2 mr-1 rounded-full ${
+                                    isConnected ? 'bg-green-500' : 'bg-gray-500'
+                                }"></span>
+                                ${isConnected ? 'Connected' : 'Disconnected'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 mb-4">
+                        <div class="flex text-sm">
+                            <span class="text-gray-500 w-24">ID:</span>
+                            <span class="font-medium">${device.device_id}</span>
+                        </div>
+                        <div class="flex text-sm">
+                            <span class="text-gray-500 w-24">Description:</span>
+                            <span class="font-medium">${device.description || 'N/A'}</span>
+                        </div>
+                        <div class="flex text-sm">
+                            <span class="text-gray-500 w-24">Last Seen:</span>
+                            <span class="font-medium">${lastSeen}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
+                        <button class="text-gray-600 hover:text-indigo-600" onclick="showDeviceDetails(${device.device_id})">
+                            <i class="fas fa-info-circle mr-1"></i> Details
+                        </button>
+                        
+                        <div class="flex space-x-2">
+                            <button class="text-indigo-600 hover:text-indigo-800 px-2 py-1" onclick="configureDevice(${device.device_id})">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button class="text-yellow-600 hover:text-yellow-800 px-2 py-1" onclick="editDevice(${device.device_id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Filter devices
+        function filterDevices() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
+            const cards = document.querySelectorAll('#devices-container > div[data-device-id]');
+            const noResults = document.getElementById('no-results');
+            
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const deviceName = card.dataset.name.toLowerCase();
+                const deviceStatus = card.dataset.status;
+                
+                const matchesSearch = deviceName.includes(searchTerm);
+                const matchesStatus = statusFilter === 'all' || deviceStatus === statusFilter;
+                
+                if (matchesSearch && matchesStatus) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            
+            // Update counter
+            document.getElementById('device-count').textContent = `${visibleCount} device${visibleCount !== 1 ? 's' : ''}`;
+            
+            // Show/hide no results message
+            if (visibleCount === 0 && cards.length > 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+        
+        // Store devices in IndexedDB
+        function storeDevicesLocally(devices) {
+            if (!db) return;
+            
+            const transaction = db.transaction([DEVICE_STORE], "readwrite");
+            const store = transaction.objectStore(DEVICE_STORE);
+            
+            devices.forEach(device => {
+                store.put({
+                    device_id: device.device_id,
+                    name: device.name,
+                    port: device.port,
+                    description: device.description || '',
+                    gateway_id: device.gateway_id,
+                    created_at: device.created_at,
+                    last_seen: device.last_seen || device.created_at
+                });
+            });
+        }
+        
+        // Load devices from IndexedDB
+        function loadDevicesFromIndexedDB() {
+            if (!db) return;
+            
+            const transaction = db.transaction([DEVICE_STORE], "readonly");
+            const store = transaction.objectStore(DEVICE_STORE);
+            const request = store.getAll();
+            
+            request.onsuccess = event => {
+                const devices = event.target.result;
+                
+                if (devices && devices.length > 0) {
+                    // Update UI with cached data
+                    const container = document.getElementById('devices-container');
+                    container.innerHTML = '';
+                    
+                    devices.forEach(device => {
+                        container.appendChild(createDeviceCard(device));
+                    });
+                    
+                    // Show offline notice
+                    const offlineNotice = document.createElement('div');
+                    offlineNotice.className = 'col-span-full bg-yellow-50 text-yellow-700 p-4 rounded-lg mb-4';
+                    offlineNotice.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas fa-wifi mr-2"></i>
+                            <span>You're viewing cached data. Some information may be out of date.</span>
+                        </div>
+                    `;
+                    
+                    container.prepend(offlineNotice);
+                }
+            };
+        }
+        
+        // Show device details modal
+        function showDeviceDetails(deviceId) {
+            fetch(`${DEVICES_ENDPOINT}/${deviceId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to fetch device details');
+                    return response.json();
+                })
+                .then(device => {
+                    const modalContent = document.getElementById('modal-content');
+                    const isConnected = Math.random() > 0.3; // Simulate connection status
+                    
+                    // Update modal title
+                    document.getElementById('modal-title').textContent = device.name;
+                    
+                    // Update modal content
+                    modalContent.innerHTML = `
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Status:</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                    isConnected ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                                }">
+                                    <span class="h-2 w-2 mr-1 rounded-full ${
+                                        isConnected ? 'bg-green-500' : 'bg-gray-500'
+                                    }"></span>
+                                    ${isConnected ? 'Connected' : 'Disconnected'}
+                                </span>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Device ID:</span>
+                                <span class="font-medium">${device.device_id}</span>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Port:</span>
+                                <span class="font-medium">${device.port}</span>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Description:</span>
+                                <span class="font-medium">${device.description || 'N/A'}</span>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Gateway ID:</span>
+                                <span class="font-medium">${device.gateway_id}</span>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Created:</span>
+                                <span class="font-medium">${new Date(device.created_at).toLocaleString()}</span>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Last Seen:</span>
+                                <span class="font-medium">${new Date(device.last_seen || device.created_at).toLocaleString()}</span>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-200">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Connection Statistics</span>
+                                    <span class="text-sm text-gray-500">Last 24 hours</span>
+                                </div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <div>
+                                        <div class="text-2xl font-bold">${Math.floor(Math.random() * 100)}%</div>
+                                        <div class="text-sm text-gray-500">Uptime</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-bold">${Math.floor(Math.random() * 50)}ms</div>
+                                        <div class="text-sm text-gray-500">Latency</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-bold">${Math.floor(Math.random() * 1000)}KB</div>
+                                        <div class="text-sm text-gray-500">Data</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Store current device ID on modal
+                    const modal = document.getElementById('device-modal');
+                    modal.dataset.deviceId = deviceId;
+                    
+                    // Show modal
+                    modal.classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error("Error fetching device details:", error);
+                    alert(`Failed to load device details: ${error.message}`);
+                });
+        }
+        
+        // Close device modal
+        function closeDeviceModal() {
+            document.getElementById('device-modal').classList.add('hidden');
+        }
+        
+        // Test device connection
+        function testDeviceConnection() {
+            const modal = document.getElementById('device-modal');
+            const deviceId = modal.dataset.deviceId;
+            const testBtn = document.getElementById('test-connection-btn');
+            
+            // Save original button content
+            const originalContent = testBtn.innerHTML;
+            
+            // Show loading state
+            testBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Testing...';
+            testBtn.disabled = true;
+            
+            // Simulate API call with setTimeout
+            setTimeout(() => {
+                const success = Math.random() > 0.3; // 70% success rate
+                
+                if (success) {
+                    testBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Connected';
+                    testBtn.classList.remove('bg-green-50', 'text-green-700');
+                    testBtn.classList.add('bg-green-500', 'text-white');
+                    
+                    // Reset after 3 seconds
+                    setTimeout(() => {
+                        testBtn.innerHTML = originalContent;
+                        testBtn.classList.remove('bg-green-500', 'text-white');
+                        testBtn.classList.add('bg-green-50', 'text-green-700');
+                        testBtn.disabled = false;
+                    }, 3000);
+                } else {
+                    testBtn.innerHTML = '<i class="fas fa-times-circle mr-2"></i> Failed';
+                    testBtn.classList.remove('bg-green-50', 'text-green-700');
+                    testBtn.classList.add('bg-red-500', 'text-white');
+                    
+                    // Reset after 3 seconds
+                    setTimeout(() => {
+                        testBtn.innerHTML = originalContent;
+                        testBtn.classList.remove('bg-red-500', 'text-white');
+                        testBtn.classList.add('bg-green-50', 'text-green-700');
+                        testBtn.disabled = false;
+                    }, 3000);
+                }
+            }, 1500);
+        }
+        
+        // Confirm device deletion
+        function confirmDeviceDeletion() {
+            const modal = document.getElementById('device-modal');
+            const deviceId = modal.dataset.deviceId;
+            
+            if (confirm('Are you sure you want to delete this device? This action cannot be undone.')) {
+                deleteDevice(deviceId);
+            }
+        }
+        
+        // Delete device
+        function deleteDevice(deviceId) {
+            // Simulate API call
+            // In a real implementation, this would call your Flask API
+            
+            // Close modal
+            closeDeviceModal();
+            
+            // Show loading overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center';
+            overlay.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-xl">
+                    <div class="text-center">
+                        <i class="fas fa-spinner fa-spin text-indigo-600 text-4xl mb-4"></i>
+                        <p class="text-gray-700">Deleting device...</p>
+                    </div>
+                    </div>
+            </div>
+            `;
+            document.body.appendChild(overlay);
+            
+            // Simulate API call with timeout
+            setTimeout(() => {
+                // Remove overlay
+                document.body.removeChild(overlay);
+                
+                // Show success notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed bottom-4 right-4 bg-green-100 text-green-800 p-4 rounded shadow-lg z-50 flex items-center';
+                notification.innerHTML = `
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>Device deleted successfully</span>
+                    <button class="ml-4 text-green-600 hover:text-green-800">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                document.body.appendChild(notification);
+                
+                // Remove notification after 3 seconds
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 3000);
+                
+                // Remove device from UI
+                const deviceCard = document.querySelector(`[data-device-id="${deviceId}"]`);
+                if (deviceCard) {
+                    deviceCard.remove();
+                    
+                    // Update device count
+                    const visibleDevices = document.querySelectorAll('#devices-container > div[data-device-id]:not(.hidden)').length;
+                    document.getElementById('device-count').textContent = `${visibleDevices} device${visibleDevices !== 1 ? 's' : ''}`;
+                    
+                    // Show no results message if needed
+                    if (visibleDevices === 0) {
+                        document.getElementById('no-results').classList.remove('hidden');
+                    }
+                }
+                
+                // Also remove from IndexedDB
+                if (db) {
+                    const transaction = db.transaction([DEVICE_STORE], "readwrite");
+                    const store = transaction.objectStore(DEVICE_STORE);
+                    store.delete(parseInt(deviceId));
+                }
+            }, 1500);
+        }
+        
+        // Configure device function
+        function configureDevice(deviceId) {
+            // Placeholder for device configuration
+            alert(`Configure device ${deviceId} - Feature coming soon`);
+        }
+        
+        // Edit device function
+        function editDevice(deviceId) {
+            // Placeholder for device editing
+            alert(`Edit device ${deviceId} - Feature coming soon`);
+        }
+        
+        // Expose functions to global scope for onclick handlers
+        window.showDeviceDetails = showDeviceDetails;
+        window.configureDevice = configureDevice;
+        window.editDevice = editDevice;
+    </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Device</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar (Same as previous page) -->
+        <div class="bg-indigo-800 text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold">Gateway Portal</h1>
+            </div>
+            <nav class="mt-5">
+                <a href="index.html" class="flex items-center px-6 py-3 text-white bg-indigo-900 hover:bg-indigo-700">
+                    <i class="fas fa-home mr-3"></i>
+                    <span>Dashboard</span>
+                </a>
+                <!-- <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700"> -->
+                <a href="gateways.html" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-network-wired mr-3"></i>
+                    <span>Gateways</span>
+                </a>
+                <a href="devices.html" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-microchip mr-3"></i>
+                    <span>Devices</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-bell mr-3"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-cog mr-3"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </div>
+        <!-- [Copy the exact same sidebar structure from previous page here] -->
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Mobile Header (Same as previous page) -->
+            <header class="bg-white shadow-sm md:hidden">
+                <div class="flex items-center justify-between p-4">
+                    <h1 class="text-xl font-semibold">Gateway Portal</h1>
+                    <button id="menu-toggle" class="text-gray-500 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+            <!-- [Copy the same mobile header structure here] -->
+            <div id="mobile-menu" class="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden hidden">
+                <div class="bg-indigo-800 text-white w-64 h-full p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Gateway Portal</h2>
+                        <button id="close-menu" class="text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <nav>
+                        <a href="index.html" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-home mr-3"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <!-- <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded"> -->
+                        <a href="gateways.html" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-network-wired mr-3"></i>
+                            <span>Gateways</span>
+                        </a>
+                        <a href="devices.html" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-microchip mr-3"></i>
+                            <span>Devices</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-chart-line mr-3"></i>
+                            <span>Analytics</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-bell mr-3"></i>
+                            <span>Notifications</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>Settings</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+            <!-- Content Area -->
+            <main class="p-6">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Device Registration</h1>
+                    <p class="text-gray-600 mt-2">Connect and register a new IoT device to your gateway</p>
+                </div>
+
+                <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+                    <form id="device-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Connected Devices</label>
+                                <div id="device-loader" class="flex items-center justify-center p-4 bg-gray-50 rounded-md">
+                                    <i class="fas fa-spinner fa-spin text-indigo-600"></i>
+                                    <span class="ml-2 text-gray-600">Scanning for devices...</span>
+                                </div>
+                                <select id="device-port" name="device-port" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 hidden" required>
+                                    <option value="">Select a device</option>
+                                </select>
+                                <div id="no-devices" class="hidden p-4 bg-yellow-50 text-yellow-700 rounded-md">
+                                    <i class="fas fa-exclamation-circle mr-2"></i>
+                                    No connected devices found
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="device-name" class="block text-sm font-medium text-gray-700 mb-1">Device Name</label>
+                                <input type="text" id="device-name" name="device-name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter device name" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300 flex items-center justify-center">
+                                <i class="fas fa-plus-circle mr-2"></i>
+                                Register Device
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Results Card -->
+                <div id="results-card" class="bg-white shadow-md rounded-lg p-6 hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Registration Results</h2>
+                    
+                    <div id="success-message" class="hidden">
+                        <div class="bg-green-100 text-green-700 p-4 rounded-md mb-4 flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Device registration successful!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 pt-4 mt-4">
+                            <h3 class="text-lg font-medium text-gray-800 mb-3">Device Details</h3>
+                            <div class="space-y-2">
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">Name:</span>
+                                    <span id="result-name" class="font-medium"></span>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">Port:</span>
+                                    <span id="result-port" class="font-medium"></span>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">Status:</span>
+                                    <span id="result-status" class="font-medium"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="error-message" class="hidden">
+                        <div class="bg-red-100 text-red-700 p-4 rounded-md mb-4 flex items-start">
+                            <i class="fas fa-exclamation-circle mt-1 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Registration failed</p>
+                                <p id="error-details" class="mt-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button id="reset-form" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                            <i class="fas fa-arrow-left mr-1"></i> Back to registration
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const SERVER_URL = "http://192.168.43.56:8000";  // For main server communication
+        const API_BASE_URL = "http://localhost:8000/api/v1";  // For local device communication
+        const DEVICE_ENDPOINT = `${SERVER_URL}/api/v1/devices`;  // Main server device endpoint
+        const GATEWAY_ID = 1;
+        
+        // IndexedDB setup for local device storage
+        let db;
+        const DB_NAME = "GatewayDB";
+        const DB_VERSION = 1;
+        const DEVICE_STORE = "devices";
+        
+        // Initialize IndexedDB
+        function initializeDatabase() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onerror = event => {
+                    console.error("IndexedDB error:", event.target.error);
+                    reject("Database error: " + event.target.error);
+                };
+                
+                request.onsuccess = event => {
+                    db = event.target.result;
+                    console.log("Database opened successfully");
+                    resolve(db);
+                };
+                
+                request.onupgradeneeded = event => {
+                    const db = event.target.result;
+                    
+                    if (!db.objectStoreNames.contains(DEVICE_STORE)) {
+                        const store = db.createObjectStore(DEVICE_STORE, { keyPath: "device_id" });
+                        store.createIndex("name", "name", { unique: false });
+                        store.createIndex("port", "port", { unique: false });
+                        store.createIndex("gateway_id", "gateway_id", { unique: false });
+                        console.log("Object store created");
+                    }
+                };
+            });
+        }
+        
+        // Discover connected devices through local API
+        async function discoverConnectedDevices() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/devices/discover`);
+                if (!response.ok) throw new Error('Device detection failed');
+                return await response.json();
+            } catch (error) {
+                console.error("Discovery error:", error);
+                throw error;
+            }
+        }
+        
+        // Store device mapping in IndexedDB
+        async function storeDeviceMapping(serverData, portInfo) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([DEVICE_STORE], "readwrite");
+                const store = transaction.objectStore(DEVICE_STORE);
+                
+                const record = {
+                    device_id: serverData.id,
+                    name: serverData.name,
+                    port: portInfo.port,
+                    description: portInfo.description,
+                    gateway_id: GATEWAY_ID,
+                    created_at: new Date().toISOString(),
+                    last_seen: new Date().toISOString()
+                };
+                
+                const request = store.put(record);
+                
+                request.onsuccess = () => resolve(record);
+                request.onerror = event => reject(event.target.error);
+            });
+        }
+        
+        async function addDeviceToServer(deviceName, portInfo) {
+    const payload = {
+        name: deviceName,
+        port: portInfo.port,
+        description: portInfo.description,
+        gateway_id: GATEWAY_ID
+    };
+    
+    try {
+        // Original API call (main server)
+        const mainResponse = await fetch(DEVICE_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        // Fire-and-forget to local endpoint
+        fetch('http://localhost:8000/api/v1/devices', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(e => console.log('Local endpoint optional error:', e));
+
+        // Maintain original response handling
+        if (!mainResponse.ok) {
+            const errorData = await mainResponse.json();
+            throw new Error(errorData.message || 'Server registration failed');
+        }
+        
+        return await mainResponse.json();
+        
+    } catch (error) {
+        console.error("Main server error:", error);
+        throw error;
+    }
+}
+        
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await initializeDatabase();
+                await loadDevices();
+                
+                // Event listeners
+                document.getElementById('device-form').addEventListener('submit', handleDeviceRegistration);
+                document.getElementById('reset-form').addEventListener('click', resetForm);
+                
+                // Mobile menu handlers
+                document.getElementById('menu-toggle').addEventListener('click', () => {
+                    document.getElementById('mobile-menu').classList.remove('hidden');
+                });
+                document.getElementById('close-menu').addEventListener('click', () => {
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                });
+            } catch (error) {
+                console.error("Initialization error:", error);
+                showError(`Initialization failed: ${error.message}`);
+            }
+        });
+        
+        // Load devices from local API
+        async function loadDevices() {
+            const select = document.getElementById('device-port');
+            const loader = document.getElementById('device-loader');
+            const noDevices = document.getElementById('no-devices');
+            
+            // Clear previous options
+            select.innerHTML = '<option value="">Select a device</option>';
+            
+            // Show loader
+            loader.classList.remove('hidden');
+            select.classList.add('hidden');
+            noDevices.classList.add('hidden');
+            
+            try {
+                const devices = await discoverConnectedDevices();
+                
+                if (devices?.length > 0) {
+                    devices.forEach((device, index) => {
+                        const option = document.createElement('option');
+                        option.value = device.port;
+                        option.textContent = `${index + 1}. ${device.port} - ${device.description}`;
+                        option.dataset.description = device.description;
+                        option.dataset.hwid = device.hwid || '';
+                        select.appendChild(option);
+                    });
+                    
+                    loader.classList.add('hidden');
+                    select.classList.remove('hidden');
+                } else {
+                    loader.classList.add('hidden');
+                    noDevices.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Error loading devices:", error);
+                loader.classList.add('hidden');
+                noDevices.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i>${error.message}`;
+                noDevices.classList.remove('hidden');
+            }
+        }
+        
+        // Handle device registration
+        async function handleDeviceRegistration(e) {
+            e.preventDefault();
+            
+            const deviceName = document.getElementById('device-name').value.trim();
+            const deviceSelect = document.getElementById('device-port');
+            const selectedOption = deviceSelect.options[deviceSelect.selectedIndex];
+            
+            // Validation
+            if (!deviceName) return showError('Device name required');
+            if (deviceSelect.selectedIndex <= 0) return showError('Please select a device');
+            
+            const portInfo = {
+                port: selectedOption.value,
+                description: selectedOption.dataset.description,
+                hwid: selectedOption.dataset.hwid
+            };
+            
+            const submitBtn = document.querySelector('#device-form button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Registering...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Register with main server
+                const serverResponse = await addDeviceToServer(deviceName, portInfo);
+                
+                // Store locally
+                await storeDeviceMapping(serverResponse, portInfo);
+                
+                // Show success
+                showSuccess({
+                    name: deviceName,
+                    port: portInfo.port,
+                    id: serverResponse.id
+                });
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                submitBtn.innerHTML = '<i class="fas fa-plus-circle mr-2"></i> Register Device';
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // UI Functions
+        function showSuccess(data) {
+            document.getElementById('result-name').textContent = data.name;
+            document.getElementById('result-port').textContent = data.port;
+            document.getElementById('result-status').textContent = 'Connected';
+            
+            document.getElementById('success-message').classList.remove('hidden');
+            document.getElementById('error-message').classList.add('hidden');
+            document.getElementById('device-form').closest('.bg-white').classList.add('hidden');
+            document.getElementById('results-card').classList.remove('hidden');
+        }
+        
+        function showError(message) {
+            document.getElementById('error-details').textContent = message;
+            document.getElementById('success-message').classList.add('hidden');
+            document.getElementById('error-message').classList.remove('hidden');
+            document.getElementById('device-form').closest('.bg-white').classList.add('hidden');
+            document.getElementById('results-card').classList.remove('hidden');
+        }
+        
+        function resetForm() {
+            document.getElementById('results-card').classList.add('hidden');
+            document.getElementById('device-form').closest('.bg-white').classList.remove('hidden');
+            document.getElementById('device-form').reset();
+            loadDevices();
+        }
+        </script>
+</body>
+</html>

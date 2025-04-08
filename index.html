@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Gateway Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="bg-indigo-800 text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold">Gateway Portal</h1>
+            </div>
+            <nav class="mt-5">
+                <a href="#" class="flex items-center px-6 py-3 text-white bg-indigo-900 hover:bg-indigo-700">
+                    <i class="fas fa-home mr-3"></i>
+                    <span>Dashboard</span>
+                </a>
+                <!-- <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700"> -->
+                <a href="gateways.html" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-network-wired mr-3"></i>
+                    <span>Gateways</span>
+                </a>
+                <a href="devices.html" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-microchip mr-3"></i>
+                    <span>Devices</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-bell mr-3"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 text-white hover:bg-indigo-700">
+                    <i class="fas fa-cog mr-3"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <!-- Mobile Header -->
+            <header class="bg-white shadow-sm md:hidden">
+                <div class="flex items-center justify-between p-4">
+                    <h1 class="text-xl font-semibold">Gateway Portal</h1>
+                    <button id="menu-toggle" class="text-gray-500 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Mobile sidebar -->
+            <div id="mobile-menu" class="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden hidden">
+                <div class="bg-indigo-800 text-white w-64 h-full p-4">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Gateway Portal</h2>
+                        <button id="close-menu" class="text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <nav>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-home mr-3"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <!-- <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded"> -->
+                        <a href="gateways.html" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-network-wired mr-3"></i>
+                            <span>Gateways</span>
+                        </a>
+                        <a href="devices.html" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-microchip mr-3"></i>
+                            <span>Devices</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-chart-line mr-3"></i>
+                            <span>Analytics</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-bell mr-3"></i>
+                            <span>Notifications</span>
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-3 text-white hover:bg-indigo-700 rounded">
+                            <i class="fas fa-cog mr-3"></i>
+                            <span>Settings</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <main class="p-6">
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Gateway Registration</h1>
+                    <p class="text-gray-600 mt-2">Register a new IoT gateway to your network infrastructure</p>
+                </div>
+
+                <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+                    <form id="gateway-form" class="space-y-6">
+                        <div>
+                            <label for="gateway-name" class="block text-sm font-medium text-gray-700 mb-1">Gateway Name</label>
+                            <input type="text" id="gateway-name" name="gateway-name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter gateway name" required>
+                        </div>
+                        
+                        <div>
+                            <label for="registration-token" class="block text-sm font-medium text-gray-700 mb-1">Registration Token</label>
+                            <input type="text" id="registration-token" name="registration-token" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter registration token provided by admin" required>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-300 flex items-center justify-center">
+                                <i class="fas fa-plus-circle mr-2"></i>
+                                Register Gateway
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Results Card (Initially Hidden) -->
+                <div id="results-card" class="bg-white shadow-md rounded-lg p-6 hidden">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Registration Results</h2>
+                    
+                    <div id="success-message" class="hidden">
+                        <div class="bg-green-100 text-green-700 p-4 rounded-md mb-4 flex items-start">
+                            <i class="fas fa-check-circle mt-1 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Gateway registration successful!</p>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 pt-4 mt-4">
+                            <h3 class="text-lg font-medium text-gray-800 mb-3">Gateway Details</h3>
+                            <div class="space-y-2">
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">Name:</span>
+                                    <span id="result-name" class="font-medium"></span>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">Status:</span>
+                                    <span id="result-status" class="font-medium"></span>
+                                </div>
+                                <div class="flex">
+                                    <span class="text-gray-600 w-24">Last Seen:</span>
+                                    <span id="result-last-seen" class="font-medium"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="error-message" class="hidden">
+                        <div class="bg-red-100 text-red-700 p-4 rounded-md mb-4 flex items-start">
+                            <i class="fas fa-exclamation-circle mt-1 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Registration failed</p>
+                                <p id="error-details" class="mt-1"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button id="reset-form" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                            <i class="fas fa-arrow-left mr-1"></i> Back to registration
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // API Base URL - Update this to match your server
+        const API_BASE_URL = "http://192.168.43.56:8000/api/v1";
+
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.remove('hidden');
+        });
+
+        document.getElementById('close-menu').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        });
+
+        // Form submission handling
+        document.getElementById('gateway-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const gatewayName = document.getElementById('gateway-name').value;
+            const registrationToken = document.getElementById('registration-token').value;
+            
+            // Build payload
+            const payload = {
+                name: gatewayName,
+                token: registrationToken
+            };
+            
+            // Show loading state
+            document.querySelector('#gateway-form button[type="submit"]').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Registering...';
+            document.querySelector('#gateway-form button[type="submit"]').disabled = true;
+            
+            // Make the API request
+            fetch(`${API_BASE_URL}/gateways/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Registration failed: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Show success UI
+                document.getElementById('success-message').classList.remove('hidden');
+                document.getElementById('error-message').classList.add('hidden');
+                
+                // Populate the result fields
+                document.getElementById('result-name').textContent = data.name || gatewayName;
+                document.getElementById('result-status').textContent = data.status || 'Active';
+                document.getElementById('result-last-seen').textContent = data.last_seen || 'Just now';
+                
+                // Show the results card
+                document.getElementById('gateway-form').closest('.bg-white').classList.add('hidden');
+                document.getElementById('results-card').classList.remove('hidden');
+            })
+            .catch(error => {
+                // Show error UI
+                document.getElementById('success-message').classList.add('hidden');
+                document.getElementById('error-message').classList.remove('hidden');
+                document.getElementById('error-details').textContent = error.message;
+                
+                // Show the results card
+                document.getElementById('gateway-form').closest('.bg-white').classList.add('hidden');
+                document.getElementById('results-card').classList.remove('hidden');
+            })
+            .finally(() => {
+                // Reset the button state
+                document.querySelector('#gateway-form button[type="submit"]').innerHTML = '<i class="fas fa-plus-circle mr-2"></i> Register Gateway';
+                document.querySelector('#gateway-form button[type="submit"]').disabled = false;
+            });
+        });
+        
+        // Reset form button
+        document.getElementById('reset-form').addEventListener('click', function() {
+            // Hide results and show form
+            document.getElementById('results-card').classList.add('hidden');
+            document.getElementById('gateway-form').closest('.bg-white').classList.remove('hidden');
+            
+            // Reset form fields
+            document.getElementById('gateway-form').reset();
+        });
+    </script>
+</body>
+</html>
