@@ -278,26 +278,41 @@
             body: JSON.stringify(payload)
         });
 
+        // Parse JSON body once
+        const mainData = await mainResponse.json();
+        console.log(mainData);
+
+        // Define new_payload where id is taken from mainData and the rest of the info remains the same
+        const new_payload = {
+            id: mainData.id,
+            name: deviceName,
+            port: portInfo.port,
+            description: portInfo.description,
+            gateway_id: GATEWAY_ID
+            // created_at: mainData.created_at  // if needed on local endpoint
+        };
+
         // Fire-and-forget to local endpoint
         fetch('http://localhost:8000/api/v1/devices', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(new_payload)
         }).catch(e => console.log('Local endpoint optional error:', e));
 
-        // Maintain original response handling
+        // Check for an unsuccessful response
         if (!mainResponse.ok) {
-            const errorData = await mainResponse.json();
-            throw new Error(errorData.message || 'Server registration failed');
+            throw new Error(mainData.message || 'Server registration failed');
         }
         
-        return await mainResponse.json();
+        // Return the parsed data from the main response
+        return mainData;
         
     } catch (error) {
         console.error("Main server error:", error);
         throw error;
     }
 }
+
         
         // Initialize application
         document.addEventListener('DOMContentLoaded', async function() {
