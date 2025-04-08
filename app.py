@@ -18,7 +18,7 @@ def run_gateway_client():
     client_path = os.path.join(current_dir, "gateway_client.py")
     
     # Run the gateway client script using Python
-    subprocess.Popen(["python", client_path])
+    subprocess.Popen(["python3", client_path])
     print("Gateway client started in parallel")
 
 # Initialize database
@@ -56,20 +56,20 @@ def discover_devices():
 def register_device():
     data = request.get_json()
     
-    # Validate required fields
-    if not data or 'name' not in data or 'port' not in data:
+    # Validate required fields (including 'id' since we're using it)
+    if not data or 'id' not in data or 'name' not in data or 'port' not in data:
         return jsonify({"error": "Missing required fields"}), 400
-    
-    # Generate a device ID (in a real scenario, this might come from somewhere else)
-    device_id = int(datetime.now().timestamp())
+
+    # Use the id from the payload
+    device_id = data['id']
     
     # Store in database
     try:
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-            INSERT INTO devices (device_id, name, port, description, gateway_id)
-            VALUES (?, ?, ?, ?, ?)
+                INSERT INTO devices (device_id, name, port, description, gateway_id)
+                VALUES (?, ?, ?, ?, ?)
             """, (
                 device_id,
                 data['name'],
@@ -88,6 +88,7 @@ def register_device():
         })
     except sqlite3.Error as e:
         return jsonify({"error": f"Database error: {str(e)}"}), 500
+
 
 # Get all devices
 @app.route('/api/v1/devices', methods=['GET'])
